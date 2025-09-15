@@ -9,6 +9,17 @@ output:
 # change to pdf_document if you have LaTeX installed
 ---
 
+
+## Data Exploration
+
+- This dataset comes from a study that tested whether using a video laryngoscope (camera) made intubation easier compared to the regular direct method.  
+- The patients were adults who needed intubation during surgery.  
+- The main treatment variable is **Randomization**:  
+  - 0 - direct laryngoscopy  
+  - 1 - video laryngoscopy  
+- The main outcomes include whether the intubation was easy or hard (**ease**), whether it was successful, and how long it took.  
+- The dataset has **99 patients** (rows) and **21 variables** (columns).  
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
@@ -22,12 +33,16 @@ data(laryngoscope)
 ```{r}
 names(laryngoscope)
 ```
+The dataset has 22 variables.
 ```{r}
 unique(laryngoscope$gender)
 ```
+Gender is coded as 0 and 1, instead of “Male”/“Female.”
 ```{r}
 table(laryngoscope$gender)
 ```
+The output shows 78 males and 21 females, meaning about one-fifth of the sample were female.
+
 ```{r}
 # pick only females (1) and under 45
 young_females <- laryngoscope[laryngoscope$gender == 1 & laryngoscope$age < 45, ]
@@ -36,7 +51,7 @@ young_females <- laryngoscope[laryngoscope$gender == 1 & laryngoscope$age < 45, 
 young_females
 
 ```
-
+There are 3 women younger than 45 in the dataset.
 ```{r}
 # check what "ease" values look like
 unique(young_females$ease)
@@ -45,7 +60,7 @@ unique(young_females$ease)
 table(young_females$ease)
 
 ```
-
+Among these 3 women, 1 had an “easy” intubation (10), while 2 had a “difficult” intubation (100).
 ```{r}
 # keep only females in groups 0 and 1
 females_groups <- laryngoscope[laryngoscope$gender == 1 & laryngoscope$Randomization %in% c(0,1), ]
@@ -60,6 +75,7 @@ quantile(females_groups$BMI[females_groups$Randomization == 1],
 
 
 ```
+Median BMI in group 0 was ~41.8, with most values between ~37.8 and 43.8. Group 0 is more spread out than Group 1 because the BMI values cover a wider range (IQR ≈ 6 vs. 2.5). This means that BMIs among females in Group 0 were more variable, while those in Group 1 were more consistent and clustered around the median. 
 ```{r}
 # simple boxplot
 boxplot(BMI ~ Randomization, data = females_groups,
@@ -68,4 +84,12 @@ boxplot(BMI ~ Randomization, data = females_groups,
 
 
 ```
+## Executive Summary
 
+This project looked at the *laryngoscope* dataset, which tracks patients in a study comparing video versus direct laryngoscopy. There are 99 patients total: 78 men (coded as 0) and 21 women (coded as 1).  
+
+When I filtered for younger women under 45, I found three patients. Out of these, two had noted an “easy” intubation, while one had a more difficult time.  
+
+I also compared BMI values for women in groups 0 and 1. The medians were very close (around 41 for group 0 and 42 for group 1), and the middle ranges overlapped substantially. Group 0 was a bit more spread out, with BMIs covering a wider range, while Group 1’s BMIs were more tightly clustered around the median. This means that BMI was distributed almost the same way in both groups overall, and while there were potentially a few individual outliers, there was no meaningful difference between the groups in terms of BMI.
+
+Overall, the results show that most younger female patients had an easy intubation, and there wasn’t much difference in BMI between the two treatment groups.  
