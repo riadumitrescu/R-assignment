@@ -1,0 +1,71 @@
+---
+title: "Assignment 1: R Competency — Laryngoscope"
+author: "Maria Dumitrescu"
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+    df_print: paged
+# change to pdf_document if you have LaTeX installed
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+
+# install/load needed packages
+if (!requireNamespace("medicaldata", quietly = TRUE)) install.packages("medicaldata")
+library(medicaldata)
+
+data(laryngoscope)
+```
+
+```{r}
+names(laryngoscope)
+```
+```{r}
+unique(laryngoscope$gender)
+```
+```{r}
+table(laryngoscope$gender)
+```
+```{r}
+# pick only females (1) and under 45
+young_females <- laryngoscope[laryngoscope$gender == 1 & laryngoscope$age < 45, ]
+
+# see the rows
+young_females
+
+```
+
+```{r}
+# check what "ease" values look like
+unique(young_females$ease)
+
+# count them
+table(young_females$ease)
+
+```
+
+```{r}
+# keep only females in groups 0 and 1
+females_groups <- laryngoscope[laryngoscope$gender == 1 & laryngoscope$Randomization %in% c(0,1), ]
+
+# look at group 0 separately
+quantile(females_groups$BMI[females_groups$Randomization == 0],
+         probs = c(0.25, 0.5, 0.75), na.rm = TRUE)
+
+# look at group 1 separately
+quantile(females_groups$BMI[females_groups$Randomization == 1],
+         probs = c(0.25, 0.5, 0.75), na.rm = TRUE)
+
+
+```
+```{r}
+# simple boxplot
+boxplot(BMI ~ Randomization, data = females_groups,
+        main = "BMI of Females by Group",
+        xlab = "Group", ylab = "BMI")
+
+
+```
+
