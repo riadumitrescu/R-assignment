@@ -1,12 +1,11 @@
 ---
-title: "Assignment 1: R Competency — Laryngoscope"
-author: "Maria Dumitrescu"
-output:
-  html_document:
+title: 'Assignment 1: R Competency — Laryngoscope'
+output: 
+  pdf_document:
+    latex_engine: xelatex
     toc: true
     toc_depth: 2
     df_print: paged
-# change to pdf_document if you have LaTeX installed
 ---
 
 
@@ -75,7 +74,7 @@ quantile(females_groups$BMI[females_groups$Randomization == 1],
 
 
 ```
-Median BMI in group 0 was ~41.8, with most values between ~37.8 and 43.8. Group 0 is more spread out than Group 1 because the BMI values cover a wider range (IQR ≈ 6 vs. 2.5). This means that BMIs among females in Group 0 were more variable, while those in Group 1 were more consistent and clustered around the median. 
+Median BMI in group 0 was ~41.8, with most values between ~37.8 and 43.8. Group 0 is more spread out than Group 1 because the BMI values cover a wider range. This means that BMIs among females in Group 0 were more variable, while those in Group 1 were more consistent and clustered around the median. 
 ```{r}
 # simple boxplot
 boxplot(BMI ~ Randomization, data = females_groups,
