@@ -81,15 +81,29 @@ Median BMI in group 0 was ~41.8, with most values between ~37.8 and 43.8. Group 
 boxplot(BMI ~ Randomization, data = females_groups,
         main = "BMI of Females by Group",
         xlab = "Group", ylab = "BMI")
+```
 
+
+```{r}
+hist(females_groups$BMI[females_groups$Randomization == 0],
+     main = "BMI Distribution for Females (Group 0 vs Group 1)",
+     xlab = "BMI", col = rgb(1,0,0,0.5), xlim = c(35,50), breaks = 10)
+
+hist(females_groups$BMI[females_groups$Randomization == 1],
+     col = rgb(0,0,1,0.5), add = TRUE, breaks = 10)
+
+legend("topright", legend = c("Group 0", "Group 1"),
+       fill = c(rgb(1,0,0,0.5), rgb(0,0,1,0.5)))
 
 ```
+The overlapping histograms show that BMI values for Groups 0 and 1 follow almost the same pattern, confirming the boxplot result that the two groups have very similar distributions.
+
 ## Executive Summary
 
-This project looked at the *laryngoscope* dataset, which tracks patients in a study comparing video versus direct laryngoscopy. There are 99 patients total: 78 men (coded as 0) and 21 women (coded as 1).  
+This project looked at the *laryngoscope* dataset, which tracks patients in a study comparing video versus direct laryngoscopy. There are 99 patients total: 78 men (coded as 0) and 22 women (coded as 1).  
 
 When I filtered for younger women under 45, I found three patients. Out of these, two had noted an “easy” intubation, while one had a more difficult time.  
 
 I also compared BMI values for women in groups 0 and 1. The medians were very close (around 41 for group 0 and 42 for group 1), and the middle ranges overlapped substantially. Group 0 was a bit more spread out, with BMIs covering a wider range, while Group 1’s BMIs were more tightly clustered around the median. This means that BMI was distributed almost the same way in both groups overall, and while there were potentially a few individual outliers, there was no meaningful difference between the groups in terms of BMI.
 
-Overall, the results show that most younger female patients had an easy intubation, and there wasn’t much difference in BMI between the two treatment groups.  
+Overall, the results show that most younger female patients in the dataset had an easy intubation, and there wasn’t much difference in BMI between the two treatment groups. It’s important to note that the subgroup of younger women was very small (n = 3), so these results cannot be generalized. Larger samples would be needed to confirm patterns in this age group.
