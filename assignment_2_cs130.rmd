@@ -1,0 +1,13 @@
+---
+title: "CS130 Assignment 2"
+date: "October 19, 2025"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## (1) – Irreducible Error
+Irreducible error, to me, means that no matter how good the model is, there’s always going to be some randomness, missing information or messines in real life. Based on this, an irreducible error makes sense because in real life, outcomes almost always depend on many things we can’t measure or don’t even know exist. However, there are systems in life (especially the ones that are controlled and physical) in which randomness is very small (almost nonexistent). Also, the only reason we call something “irreducible” is because we haven’t measured or modeled it yet. If we could perfectly measure every variable influencing Y, for instance, all the forces in a physics experiment, then the error could be zero. So “irreducible error” is more showing the limits of humanity currently, not necesarily that it would exist if we would have infinite intelligence. 
+
+```{r setup, include=FALSE}
