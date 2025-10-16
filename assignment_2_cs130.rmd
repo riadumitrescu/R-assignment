@@ -10,4 +10,60 @@ knitr::opts_chunk$set(echo = TRUE)
 ## (1) – Irreducible Error
 Irreducible error, to me, means that no matter how good the model is, there’s always going to be some randomness, missing information or messines in real life. Based on this, an irreducible error makes sense because in real life, outcomes almost always depend on many things we can’t measure or don’t even know exist. However, there are systems in life (especially the ones that are controlled and physical) in which randomness is very small (almost nonexistent). Also, the only reason we call something “irreducible” is because we haven’t measured or modeled it yet. If we could perfectly measure every variable influencing Y, for instance, all the forces in a physics experiment, then the error could be zero. So “irreducible error” is more showing the limits of humanity currently, not necesarily that it would exist if we would have infinite intelligence. 
 
-```{r setup, include=FALSE}
+## (2) - 
+
+“Inference is the process of using data to learn about things we cannot directly observe.”
+
+
+## (3)
+
+Predictive inference and causal inference both use data, but they answer different questions. Predictive inference is about finding patterns to make accurate guesses, what Kleinberg and his colleagues call a “prediction machine.” It can tell us what will probably happen next, like which workers are most likely to lose their jobs or which patients might get sick, but it doesn’t tell us why. Causal inference focuses on why outcomes change,  what would happen if we changed something, like whether job training actually causes people to earn more. For that, we need to think of the counterfactual, what would have happened if those same people hadn’t received the training. Because we can’t see that directly, we use prediction models to estimate it, which means causal inference depends on prediction. In policymaking, prediction helps identify who or where to act, while causation shows which actions make a difference. 
+
+## (4)
+The link to my gemini app: https://ai.studio/apps/drive/1Z3jyXnLE1OyjN5Q33j2ueQzyKyqt7KK1
+
+When I used my app and tried different sets of points, I noticed that it’s actually possible to find a fifth point that flips the direction of the regression line — but only if I make that point very extreme. For example, if my first four points went upward, I could add a fifth point that’s far to the right and much lower than the others, and it made the line tilt downward instead of up. So in theory, there’s always some point that can do it if you place it far enough away. But in practice, that kind of point wouldn’t make sense because it would be so far outside the usual pattern — basically an outlier. It was interesting to see how just one point can completely change the result, especially when you only have a few data points. It made me realize how fragile small samples are and how easily a single extreme value can mess up what the model seems to be saying.
+## (5) 
+
+```{r}
+set.seed(123)
+
+n <- 150
+
+# predictors
+social_media <- rnorm(n, mean = 5, sd = 2)          # X1
+marketing_budget <- 0.6 * social_media + rnorm(n)   # X2 (partly correlated)
+ticket_price <- -0.5 * marketing_budget + rnorm(n)  # X3 (higher budget = lower price)
+
+# outcome: gallery visitors (Y)
+visitors <- 50 + 2*social_media - 3*marketing_budget + 1.5*ticket_price + rnorm(n, sd=2)
+
+# regressions
+summary(lm(visitors ~ social_media))
+summary(lm(visitors ~ social_media + marketing_budget))
+summary(lm(visitors ~ social_media + marketing_budget + ticket_price))
+
+```
+In my simulated example, I modeled gallery attendance as a function of social media promotion, marketing budget, and ticket price. When I regressed visitors on social media alone, the coefficient was small and insignificant, suggesting no clear effect. After adding marketing budget, the sign became strongly positive, revealing that galleries with low budgets rely more on social media, which masked its real benefit. Including ticket price further clarified the relationship and improved prediction. This pattern reflects omitted variable bias: correlations among predictors can flip signs when confounders are added or removed. For prediction, these sign changes may not matter as long as the model fits well, but for causal inference they are critical, since they can lead to wrong conclusions about what truly causes higher attendance. Randomized controlled trials avoid this issue by breaking correlations among predictors, revealing the true causal effect.
+
+
+## (6)
+
+On the right side, we have the variables that describe the relationship itself (the model parameters), like the slope and intercept. These are about how the X variables (inputs) affect Y (the outcome). The confidence interval here tells us how sure we are about that relationship. For example, if my model says that for every extra art exhibition an art gallery hosts, it gets about 20 more visitors, a 95% confidence interval from 15 to 25 means I’m fairly confident the real effect lies somewhere in that range.
+
+On the left side, we have the predicted outcomes, in this case, how many visitors we expect. There are two kinds of intervals for these predictions.The first is the confidence interval for the mean prediction, which shows the range where the average gallery’s attendance would likely be in. For example, if galleries that hold 5 exhibitions are predicted to get around 140 visitors, the mean confidence interval might be from 135 to 145.
+
+The second is the prediction interval, which is for one specific gallery. It’s wider because every gallery is different, maybe one is in a busier area or promotes differently. So, for a single gallery hosting 5 exhibitions, the prediction interval might be from 120 to 160 visitors.
+
+These three intervals together describe different kinds of uncertainty in the same model. The parameter interval tells us how confident we are about the relationship itself: how much exhibitions usually affect visitors. The mean prediction interval tells us where the average attendance is likely to fall, and the prediction interval shows how much an individual gallery’s attendance might vary. Together, they show that even with one simple model, uncertainty exists at multiple levels: in how strong the relationship is, in the average outcome, and in real-world individual cases.
+
+## 6
+
+In FA, we learned that data is usually divided into training, validation, and test sets to fairly evaluate models. The training set teaches the model, the validation set is used to compare different versions or tune parameters, and the test set checks how well the final model performs on unseen data. This helps prevent overfitting and gives a more honest estimate of real-world performance.
+
+In CS130, we built directly on that idea by learning about cross-validation, which repeats the process of training and validation many times instead of keeping one fixed split. We learned about two main types — k-fold cross-validation and leave-one-out cross-validation (LOOCV). In k-fold, the data is divided into k equal parts (for example, 5 or 10), and the model trains on k−1 folds while the remaining one is used for validation. This repeats k times so every data point is used for both training and validation once. In LOOCV, we take this to the extreme — each observation acts as its own validation set, so the model trains on all the others and tests on just one at a time.
+
+In class, we talked about how LOOCV tends to have higher variance because the validation sets overlap so much that their errors are highly correlated. This makes LOOCV less stable, even though it uses almost all the data for training each time. In contrast, k-fold cross-validation (especially with k = 5 or 10) gives a better balance — the training sets are still large, but the folds are different enough that the average error is more reliable and less noisy. We also discussed that both methods still follow the same idea from FA: using some data for training and some for validation, but cross-validation just makes that process systematic and repeatable.
+
+Overall, FA taught us the logic of keeping data separated to test generalization, and CS130 showed us how to make that process stronger and more data-efficient by averaging results across multiple validation splits.
+
